@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Qatar Foundation</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dashboard-page">
+
+  <!-- ── NAVBAR ─────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="logo-icon small">QF</div>
+      <span>Qatar Foundation Admin</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-username"></span>
+      <button class="btn btn-outline-white" onclick="handleLogout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ───────────────────────────────────────────────────── -->
+  <div class="dashboard-container">
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Opportunity Management</h1>
+        <p class="dashboard-subtitle">Manage all your opportunities in one place.</p>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">+ Add New Opportunity</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="state-box">
+      <div class="spinner"></div>
+      <p>Loading opportunities...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="state-box hidden">
+      <div class="empty-icon">📋</div>
+      <h3>No Opportunities Yet</h3>
+      <p>Click "Add New Opportunity" to create your first one.</p>
+    </div>
+
+    <!-- Opportunities Grid -->
+    <div id="opportunities-grid" class="opp-grid hidden"></div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ADD / EDIT MODAL                                                       -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="form-modal" class="modal-overlay hidden" onclick="closeFormModalOnOverlay(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="form-modal-title">Add New Opportunity</h2>
+        <button class="modal-close-btn" onclick="closeFormModal()">✕</button>
+      </div>
+
+      <div id="form-error" class="alert alert-error hidden"></div>
+
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Opportunity Name <span class="req">*</span></label>
+          <input type="text" id="f-name" placeholder="e.g. AI Research Internship">
+        </div>
+
+        <div class="form-group">
+          <label>Category <span class="req">*</span></label>
+          <select id="f-category">
+            <option value="">Select Category</option>
+            <option value="Technology">Technology</option>
+            <option value="Business">Business</option>
+            <option value="Design">Design</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Data Science">Data Science</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Duration <span class="req">*</span></label>
+          <input type="text" id="f-duration" placeholder="e.g. 3 months">
+        </div>
+
+        <div class="form-group">
+          <label>Start Date <span class="req">*</span></label>
+          <input type="date" id="f-start-date">
+        </div>
+
+        <div class="form-group">
+          <label>Max Applicants <span class="optional">(optional)</span></label>
+          <input type="number" id="f-max" placeholder="e.g. 20" min="1">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Description <span class="req">*</span></label>
+          <textarea id="f-description" placeholder="Describe this opportunity..."></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Skills to Gain <span class="req">*</span></label>
+          <input type="text" id="f-skills" placeholder="e.g. Python, Machine Learning, Research Writing">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Future Opportunities <span class="req">*</span></label>
+          <textarea id="f-future" placeholder="What career paths does this lead to?"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeFormModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitOpportunity()" id="form-submit-btn">
+          Save Opportunity
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- DETAILS MODAL                                                          -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="details-modal" class="modal-overlay hidden" onclick="closeDetailsModalOnOverlay(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Opportunity Details</h2>
+        <button class="modal-close-btn" onclick="closeDetailsModal()">✕</button>
+      </div>
+      <div id="details-content" class="details-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- DELETE CONFIRM MODAL                                                   -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <div id="delete-modal" class="modal-overlay hidden" onclick="closeDeleteModalOnOverlay(event)">
+    <div class="modal-box small">
+      <div class="modal-header">
+        <h2>Confirm Delete</h2>
+        <button class="modal-close-btn" onclick="closeDeleteModal()">✕</button>
+      </div>
+      <div class="delete-body">
+        <div class="delete-icon">🗑️</div>
+        <p>Are you sure you want to permanently delete <strong id="delete-opp-name"></strong>?</p>
+        <p class="delete-warning">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost"    onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger"   onclick="confirmDelete()" id="confirm-delete-btn">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/opportunities.js"></script>
+</body>
+</html>

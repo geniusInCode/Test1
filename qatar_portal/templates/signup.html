@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Qatar Foundation</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">QF</div>
+      <h1>Qatar Foundation</h1>
+      <p>Admin Portal</p>
+    </div>
+
+    <h2>Create Account</h2>
+
+    <div id="error-msg" class="alert alert-error hidden"></div>
+    <div id="success-msg" class="alert alert-success hidden"></div>
+
+    <div class="form-group">
+      <label for="full_name">Full Name</label>
+      <input type="text" id="full_name" placeholder="Enter your full name" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password">
+    </div>
+    <div class="form-group">
+      <label for="confirm_password">Confirm Password</label>
+      <input type="password" id="confirm_password" placeholder="Re-enter your password" autocomplete="new-password">
+    </div>
+
+    <button class="btn btn-primary" onclick="handleSignup()" id="signup-btn">
+      Create Account
+    </button>
+
+    <p class="auth-footer">Already have an account? <a href="/login">Log in</a></p>
+  </div>
+
+  <script src="/static/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Qatar Foundation</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">QF</div>
+      <h1>Qatar Foundation</h1>
+      <p>Admin Portal</p>
+    </div>
+
+    <h2>Welcome Back</h2>
+
+    <div id="error-msg" class="alert alert-error hidden"></div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+    </div>
+
+    <div class="form-row">
+      <label class="checkbox-label">
+        <input type="checkbox" id="remember_me">
+        <span>Remember Me</span>
+      </label>
+      <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+    </div>
+
+    <button class="btn btn-primary" onclick="handleLogin()" id="login-btn">
+      Log In
+    </button>
+
+    <p class="auth-footer">Don't have an account? <a href="/signup">Sign up</a></p>
+  </div>
+
+  <script src="/static/js/auth.js"></script>
+</body>
+</html>
